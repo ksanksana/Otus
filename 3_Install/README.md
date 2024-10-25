@@ -1,10 +1,10 @@
-Домашнее задание к уроку "Варианты установки Angie"
+# Домашнее задание к уроку "Варианты установки Angie"
 
 OS Ubuntu 24.04.1 LTS
 
-1. Установка Angie из репозитория
+## Установка Angie из репозитория
 
-sudo su
+```sudo su```
 
 # Установить вспомогательные пакетов
 apt-get update && apt-get install -y ca-certificates curl
