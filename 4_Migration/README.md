@@ -23,7 +23,7 @@ $ ps afx | grep nginx
 
 ### Перенести конфиги из домашнего задания в /etc/nginx
 
-Получившиеся конфиги лежат в nginx_config.
+Получившиеся конфиги лежат в папке nginx.
 
 ### Установить angie и модули
 
@@ -100,8 +100,8 @@ total 8
 drwxr-xr-x 2 root root 4096 Nov  8 14:11 .
 drwxr-xr-x 8 root root 4096 Nov  8 14:10 ..
 lrwxrwxrwx 1 root root   34 Nov  8 14:11 default -> /etc/angie/sites-available/default
-
 ```
+Получившиеся конфиги лежат в папке angie.
 ### Переключиться на angie
 Проверить конфиг
 ```
