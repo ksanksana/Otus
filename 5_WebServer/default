@@ -22,14 +22,17 @@ server {
     	}
 
 	location /assets/ {
+		add_header Cache-Control "max-age=31536000, public, no-transform, immutable";
 		add_header Test-Header 'assets';
 	}
 
 	location /error/ {
+		add_header Cache-Control "no-cache";
 		add_header Test-Header 'error';
 	}
 
 	location /images/ {
+		add_header Cache-Control "max-age=31536000, public, no-transform, immutable";
 		add_header Test-Header 'images';
 	}
 
