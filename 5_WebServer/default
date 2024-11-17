@@ -1,0 +1,41 @@
+server {
+	listen 80;
+	server_name otus.genger.ru;
+
+	access_log /var/log/angie/default.log;
+
+	root   /etc/angie/html/static_site;
+
+	# internal redirect
+	rewrite ^/favicon.ico /images/favicon.ico last;
+	
+	# 302 redirect
+	rewrite ^/index.php /index.html redirect;
+
+	# 301 redirect
+	location /en {
+		return 301 http://otus.genger.ru;
+	}
+
+	location / {
+        	index  index.html;
+    	}
+
+	location /assets/ {
+		add_header Test-Header 'assets';
+	}
+
+	location /error/ {
+		add_header Test-Header 'error';
+	}
+
+	location /images/ {
+		add_header Test-Header 'images';
+	}
+
+	location ~* \.(jpg|jpeg|gif|png)$ {
+		add_header Vary $vary_header;
+		add_header Cache-Control $cache_control;
+		try_files $uri$avif_suffix $uri$webp_suffix $uri =404;
+	}
+}
