@@ -19,7 +19,7 @@ $ apt install mysql-server-8.0
 
 $ apt install php-fpm php-curl php-mysqli php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
 ```
-### Захрдим в mysql и создаем базу данных и пользователя для wordpress
+### Заходим в mysql и создаем базу данных и пользователя для wordpress
 
 ```
 $ mysql
@@ -45,3 +45,6 @@ $ sudo chown -R www-data:www-data /var/www/wordpress
 ```
 ### Правим wp-config.php
 Указываем название базы данных, имя пользователя и пароль.
+
+### Устанавливаем wordpress
+Скриншот и конфиги запущенного приложения выложены в репозиторий.
