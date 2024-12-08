@@ -1,0 +1,67 @@
+server {
+    listen	80;
+    server_name  otus.genger.ru;
+
+    status_zone wordpress;
+
+    charset utf-8;
+
+    location ^~ /angie-console/ {
+        status_zone angie-console;
+    
+        # Только локальный доступ
+        #allow 127.0.0.1;
+        #deny all;
+    
+        auto_redirect on;
+    
+        alias /usr/share/angie-console-light/html/;
+        index index.html;
+    
+        location /angie-console/api/ {
+            api /status/;
+        }
+    }
+
+    location =/p8s {
+        prometheus all;
+    }
+
+    root /var/www/wordpress;
+    index index.html index.php;
+
+    location ~ /\. {
+	deny all;
+    }
+	 
+    location ~ ^/wp-content/cache { 
+	deny all;
+    }
+	 
+    location ~* /(?:uploads|files)/.*\.php$ {
+	deny all;
+    }
+
+    location / {
+	try_files $uri $uri/ /index.php?$args;
+    }
+
+    location /wp-content {
+        status_zone wp-content;
+	add_header Cache-Control "max-age=31536000, public, no-transform, immutable";
+    }
+
+    location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
+        status_zone static;
+	add_header Cache-Control "max-age=31536000, public, no-transform, immutable";
+    }
+
+    location ~ \.php$ {
+        status_zone php;
+	include fastcgi.conf;
+	fastcgi_intercept_errors on;
+	fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+	fastcgi_index index.php;
+    }
+}
+
