@@ -1,0 +1,157 @@
+server {
+    listen	80 reuseport;
+    server_name otus.genger.ru;
+    return 301 https://otus.genger.ru$request_uri;
+}
+
+server {
+    listen      443 ssl reuseport;
+    listen      443 quic reuseport;
+
+    http2 on;
+    http3 on;
+
+    server_name otus.genger.ru;
+
+    quic_gso on;
+    quic_retry off;
+
+    acme                rsa;
+    acme                ecdsa;
+
+    ssl_certificate     $acme_cert_rsa;
+    ssl_certificate_key $acme_cert_key_rsa;
+    ssl_certificate     $acme_cert_ecdsa;
+    ssl_certificate_key $acme_cert_key_ecdsa;
+
+
+#    ssl_certificate     /etc/letsencrypt/live/otus.genger.ru/fullchain.pem;
+#    ssl_certificate_key /etc/letsencrypt/live/otus.genger.ru/privkey.pem;
+
+    status_zone wordpress;
+
+    charset utf-8;
+
+    proxy_connect_timeout 5;
+    proxy_send_timeout    10;
+    proxy_read_timeout    10;
+
+    proxy_temp_file_write_size 64k;
+    proxy_buffer_size 4k;
+    proxy_buffers 64 4k;
+    proxy_busy_buffers_size 32k;
+
+    open_file_cache          max=10000 inactive=60s;
+    open_file_cache_valid    30s;
+    open_file_cache_errors   on;
+    open_file_cache_min_uses 2;
+
+    open_log_file_cache max=100 inactive=60s min_uses=2;
+
+
+    zstd on;
+    zstd_min_length 256;
+    zstd_comp_level 5;
+    zstd_types text/plain text/css text/xml application/javascript application/json image/x-icon image/svg+xml;
+
+
+    gzip on;
+    gzip_static on;
+    gzip_types text/plain text/css text/xml application/javascript application/json image/svg+xml application/font-ttf;
+    gzip_comp_level 5;
+    gzip_proxied any;
+    gzip_min_length 1000;
+    gzip_vary on;
+
+
+    brotli_static on;
+    brotli on;
+    brotli_comp_level 5;
+    brotli_types text/plain text/xml text/css application/javascript application/json image/x-icon image/svg+xml;
+
+
+    location ^~ /angie-console/ {
+        status_zone angie-console;
+    
+        # Только локальный доступ
+        #allow 127.0.0.1;
+        #deny all;
+    
+        auto_redirect on;
+    
+        alias /usr/share/angie-console-light/html/;
+        index index.html;
+    
+        location /angie-console/api/ {
+            api /status/;
+        }
+    }
+
+    location =/p8s {
+        prometheus all;
+    }
+
+    root /var/www/wordpress;
+    index index.html index.php;
+
+    location ^~/.well-known/ {
+    }
+	
+    location ~ /\. {
+	deny all;
+    }
+ 
+    location ~ ^/wp-content/cache { 
+	deny all;
+    }
+	 
+    location ~* /(?:uploads|files)/.*\.php$ {
+	deny all;
+    }
+
+    location =/ {
+	status_zone location_root;
+
+	include fastcgi.conf;
+	fastcgi_intercept_errors on;
+	fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+	fastcgi_index index.php;
+
+        fastcgi_cache one;
+        fastcgi_cache_valid 200 1h;
+        fastcgi_cache_lock on;
+        fastcgi_cache_min_uses 2;
+        fastcgi_ignore_headers "Cache-Control" "Expires";
+        fastcgi_cache_use_stale updating error timeout invalid_header http_500;
+        fastcgi_cache_background_update on;
+
+        add_header X-FastCGI-Cache $upstream_cache_status;
+    }
+
+    location / {
+	try_files $uri $uri/ /index.php?$args;
+        add_header Alt-Svc 'h3=":443"; ma=86400';
+        add_header Strict-Transport-Security max-age=31536000;
+   }
+
+    location /wp-content {
+        status_zone wp-content;
+	add_header Cache-Control "max-age=31536000, public, no-transform, immutable";
+    }
+
+    location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
+        status_zone static;
+        add_header Vary $vary_header;
+        add_header Cache-Control $cache_control;
+        try_files $uri$avif_suffix $uri$webp_suffix $uri =404;
+    }
+
+    location ~ \.php$ {
+        status_zone php;
+	include fastcgi.conf;
+	fastcgi_intercept_errors on;
+	fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+	fastcgi_index index.php;
+    }
+}
+
