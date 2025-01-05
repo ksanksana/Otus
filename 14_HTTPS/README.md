@@ -7,7 +7,6 @@
     resolver 127.0.0.53 ipv6=off;
     acme_client rsa   https://acme-v02.api.letsencrypt.org/directory key_type=rsa;
     acme_client ecdsa https://acme-v02.api.letsencrypt.org/directory;
-
 ```
 
 в wordpress.conf:
@@ -19,7 +18,6 @@
     ssl_certificate_key $acme_cert_key_rsa;
     ssl_certificate     $acme_cert_ecdsa;
     ssl_certificate_key $acme_cert_key_ecdsa;
-
 ```
 
 ### Настройка основных параметров HTTPS в Angie
@@ -41,7 +39,6 @@ openssl dhparam -out dhparam.pem 4096
     ssl_dhparam /etc/angie/dhparam.pem;
     ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305;
     ssl_prefer_server_ciphers off;
-
 ```
 
 ### Оптимизируем восстановление сессий
@@ -54,14 +51,12 @@ openssl dhparam -out dhparam.pem 4096
     # server-side
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 28h;
-
 ```
 
 на стороне клиента:
 ```
     # client-side
     ssl_session_tickets on;
-
 ```
 
 ###  Автоматическая переадресация с HTTP на HTTPS
@@ -102,7 +97,7 @@ quic_retry off;
 
 ### Тестирование корректности конфигурации с помощью внешнего сервиса
 
-https://testtls.com/otus.genger.ru/443
+https://testtls.com/otus.genger.ru/443  
 https://www.ssllabs.com/ssltest/analyze.html?d=otus.genger.ru
 
 
