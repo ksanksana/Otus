@@ -2,7 +2,6 @@
 
 ### Равномерная балансировка (round robin).
 ```
-# round robin balancing
 upstream backend_rr {
     zone upstream-backend-rr 256k;
     server 127.0.0.1:9000 weight=2;
@@ -22,7 +21,6 @@ server {
 
 ### Балансировка по хэшу с использованием переменных.
 ```
-# hash balancing
 upstream backend_hash {
     zone upstream-backend-hash 256k;
     hash $scheme$request_uri;
@@ -41,13 +39,16 @@ server {
 }
 ```
 
-Проверка работоспособности
+#### Проверка работоспособности
 ```
+ab -n 100 -k -c 1 http://otus.genger.ru/hash/
 ab -n 100 -k -c 1 http://otus.genger.ru/hash/a=1
 ab -n 100 -k -c 1 http://otus.genger.ru/hash/a=2
 ab -n 100 -k -c 1 http://otus.genger.ru/hash/a=3
 ab -n 100 -k -c 1 http://otus.genger.ru/hash/a=4
 ```
+<img src="/16_Balancing/hash.png" width=400/>
+
 ### Произвольная балансировка (random).
 ```
 upstream backend_random {
@@ -68,10 +69,12 @@ server {
 }
 ```
 
-Проверка работоспособности
+#### Проверка работоспособности
 ```
 ab -n 100 -k -c 1 http://otus.genger.ru/random/
 ```
+<img src="/16_Balancing/random.png" width=400/>
+
 ### Вариант конфигурации с резервным бэкендом и с отключением одного из бэкендов (на примере rr балансировки).
 
 ```
@@ -83,7 +86,8 @@ upstream backend_rr {
     server 127.0.0.1:9003 down;         # gold
 }
 ```
-Проверка работоспособности
+#### Проверка работоспособности
 ```
 ab -n 100 -k -c 1 http://otus.genger.ru/rr/
 ```
+<img src="/16_Balancing/rr.png" width=400/>
