@@ -6,8 +6,8 @@
 
 ```
 limit_req_zone $binary_remote_addr zone=lone:10m rate=10r/s;
-
 ```
+
 В location ~ \.php$ активирую ограничение: позволяю в среднем не более 10 запросов в секунду со всплесками не более 10 запросов, без задержки избыточных запросов в пределах лимита:
 ```
 limit_req zone=lone burst=10 nodelay;
@@ -31,12 +31,11 @@ root@nginx-angie:/etc/angie# tail -n 10 /var/log/angie/error.log
 Устанавливаю fail2ban
 ```
 apt install fail2ban
-
 ```
 
 Настройка:
 ```
-# скопировать файл конйигурации
+# скопировать файл конфигурации
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 
 # в него прописать
