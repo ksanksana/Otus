@@ -6,7 +6,7 @@
 - backend2
 - mysql
 
-<img src=/Project/scheme.jpg width=400 />
+<img src=/Project/scheme.jpg width=800 />
 
 ### Балансировщик
 <a href=/Project/balancer>Конфиг</a>
