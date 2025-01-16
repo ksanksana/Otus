@@ -40,6 +40,9 @@ $ cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
 ```
 ### Копируем все и выставляем нужные права
 ```
+$ mkdir /var/www
+$ mkdir /var/www/wordpress
+
 $ sudo cp -a /tmp/wordpress/. /var/www/wordpress
 $ sudo chown -R www-data:www-data /var/www/wordpress
 ```
