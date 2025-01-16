@@ -1,21 +1,22 @@
+# Тема: Реализация отказоустойчивой инфраструктуры веб-приложения на базе веб-сервера Angie
 ## Структура проекта:
 
 - балансировщик
 - backend1
 - backend2
 - mysql
-- elk
+
+<img src=/Project/scheme.jpg width=400 />
 
 ### Балансировщик
-устанавливаю angie по инструкции
-вставить конфиг
-установить angie-console-light
+<a href=/Project/balancer>Конфиг</a>
 
-
+Установлены Angie, angie-console-light, модули brotli и zstd.
 
 ### Backend-1, Backend-2
-устанавливаю angie по инструкции
-устанавливаю wordpress по инструкции
+<a href=/Project/backends>Конфиг</a>
+
+Установлены Angie и Wordpress.
 
 #### Устанавливаем wordpress
 ```
@@ -39,23 +40,26 @@ $ sudo chown -R www-data:www-data /var/www/wordpress
 Указываем название базы данных, имя пользователя и пароль.
 
 
-#### Устанавливаем mysql и php 
+#### Устанавливаем mysql
 
 ```
-$ apt install mysql-server-8.0 ???
-
 $ apt install php-fpm php-curl php-mysqli php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip
 ```
 
 ## db
 устанавливаю mysql
-
+```
 apt install mysql-server-8.0
+```
 
-в /etc/mysql/mysql.conf.d/mysqld.cnf закомментировать строчку
+Для того, чтобы к базе можно было обращаться с внешнего сервера, надо в /etc/mysql/mysql.conf.d/mysqld.cnf закомментировать строчку
+```
 #bind-address           = 127.0.0.1
-restart mySQL service using the follwing command: sudo /etc/init.d/mysql restart
-
+```
+и перезагрузить mySQL service следующей командой:
+```
+sudo /etc/init.d/mysql restart
+```
 ### Заходим в mysql и создаем базу данных и пользователя для wordpress
 
 ```
@@ -65,9 +69,7 @@ mysql> CREATE DATABASE wordpress;
 mysql> GRANT ALL ON wordpress.* to 'wordpress'@'%';
 ```
 
-
-
-Нагрузочное тестирование
+## Нагрузочное тестирование
 ```
 oksana@wbsrv:~/.ssh$ ab -n 1000 -k -c 1 -H "Accept-Encoding: gzip" https://oksana-deeva.ru/
 This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
