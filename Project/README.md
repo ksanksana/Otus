@@ -65,3 +65,67 @@ mysql> CREATE DATABASE wordpress;
 mysql> GRANT ALL ON wordpress.* to 'wordpress'@'%';
 ```
 
+
+
+Нагрузочное тестирование
+```
+oksana@wbsrv:~/.ssh$ ab -n 1000 -k -c 1 -H "Accept-Encoding: gzip" https://oksana-deeva.ru/
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking oksana-deeva.ru (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        Angie/1.8.1
+Server Hostname:        oksana-deeva.ru
+Server Port:            443
+SSL/TLS Protocol:       TLSv1.3,TLS_AES_256_GCM_SHA384,256,256
+Server Temp Key:        X25519 253 bits
+TLS Server Name:        oksana-deeva.ru
+
+Document Path:          /
+Document Length:        58641 bytes
+
+Concurrency Level:      1
+Time taken for tests:   151.052 seconds
+Complete requests:      1000
+Failed requests:        500
+   (Connect: 0, Receive: 0, Length: 500, Exceptions: 0)
+Keep-Alive requests:    0
+Total transferred:      58887500 bytes
+HTML transferred:       58600500 bytes
+Requests per second:    6.62 [#/sec] (mean)
+Time per request:       151.052 [ms] (mean)
+Time per request:       151.052 [ms] (mean, across all concurrent requests)
+Transfer rate:          380.71 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       14   23   4.1     23      87
+Processing:    83  128  28.5    121     337
+Waiting:       77  117  28.0    111     330
+Total:        100  151  29.5    144     362
+
+Percentage of the requests served within a certain time (ms)
+  50%    144
+  66%    155
+  75%    163
+  80%    169
+  90%    188
+  95%    204
+  98%    229
+  99%    268
+ 100%    362 (longest request)
+```
