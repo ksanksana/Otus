@@ -39,7 +39,6 @@ $ sudo chown -R www-data:www-data /var/www/wordpress
 ##### Правим wp-config.php
 Указываем название базы данных, имя пользователя и пароль.
 
-
 #### Устанавливаем mysql
 
 ```
